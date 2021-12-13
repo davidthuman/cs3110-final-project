@@ -24,7 +24,7 @@
    - David Thuman
    - Taylor Stephens
 
- ************************************************************)
+ ************************************************************) *)
 
 val hours_worked : int
 (** [hours_worked] is the number of hours each student worked on this

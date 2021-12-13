@@ -3,7 +3,6 @@
     @author Adele Smolansky (as2953)
     @author David Thuman (dmt93)
     @author Taylor Stephens (tms279)
-    @author Lyon (JJ) Li (lbl53) *)
 
 (************************************************************
 
@@ -24,9 +23,8 @@
    - Adele Smolansky
    - David Thuman
    - Taylor Stephens
-   - Lyon (JJ) Li
 
- ************************************************************)
+ ************************************************************) *)
 
 val hours_worked : int
 (** [hours_worked] is the number of hours each student worked on this

@@ -281,6 +281,9 @@ let acronym_add_handler r w =
   acronym_messages ADD_ACRONYM;
   read_new_acronym r w
 
+let acronym_view_handler r w = return ()
+let acronym_delete_handler r w = return ()
+
 (* [main_acronym_handler server_msg r w] reads a message from the server
    after a user entered a command to interact with the acronyms and
    matches the [server_msg] to the next step *)

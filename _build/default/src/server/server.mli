@@ -8,6 +8,7 @@ type uname_and_pwds = (string * string * Writer.t) list
 type server_state = {
   uname_and_pwds : uname_and_pwds;
   curr_users : string list;
+  acronyms : (string * string) list;
 }
 
 (* [output] is the output from the server to the user with [uid] *)
