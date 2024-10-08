@@ -136,7 +136,7 @@ and login_process r w uname =
         read_usern r w EXISTING_USER)
 
 and password_process r w uname pass =
-  Writer.write_line w ("00100" ^ uname ^ ":" ^ pass);
+  Writer.write_line w ("00100" ^ pass);
   Reader.read_line r >>= function
   | `Eof ->
       print_endline "Error: Server connection";
@@ -164,7 +164,7 @@ and signup_process r w uname =
         read_usern r w NEW_USER)
 
 and new_password_process r w uname pass =
-  Writer.write_line w ("00101" ^ uname ^ ":" ^ pass);
+  Writer.write_line w ("00101" ^ pass);
   Reader.read_line r >>= function
   | `Eof ->
       print_endline "Error: Server connection";

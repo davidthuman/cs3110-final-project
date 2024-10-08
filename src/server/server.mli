@@ -1,63 +1,63 @@
 open Core
 open Async
 
-(* [uname_and_pwds] is the list of usernames and passwords *)
-type uname_and_pwds = (string * string * Writer.t) list
+(* [user_data] is the list of (unique usernames) and passwords *)
+type user_data = (string * string) list
 
-(* [server_state] is the current state of the server *)
-type server_state = {
-  uname_and_pwds : uname_and_pwds;
-  curr_users : string list;
+(* [current_conn] is the list of (unique usernames) attached to the
+   users (Reader and Writer) pair. *)
+type current_conn = (string * (Reader.t * Writer.t)) list
+
+(* [chat] is the list of (unique integers) to represent different caht
+   rooms attached to a string list of (unique usernames) of user that
+   are currently in that chatroom. *)
+type chat = (int * string list) list
+
+(* [msg_hist] is the list of messages that have been sent in a certain
+   chatroom. Each (unique integer) chatroom with have attached a string
+   tuple representing a (unique username) and their message. *)
+type msg_hist = (int * (string * string) list) list
+
+(* [state] is the state of the total data that the server has stored. *)
+type state = {
+  user_data : user_data;
+  current_conn : current_conn;
+  chat : chat;
+  msg_hist : msg_hist;
 }
 
-(* [output] is the output from the server to the user with [uid] *)
-type output = {
-  uid : int;
-  output : string;
-}
-
-(* [input] is the message that the server receives from a user with
-   [uid] *)
-type input = {
-  uid : int;
+(* [server_data] is the current data collection that the server is
+   attempting to handle. *)
+type server_data = {
+  state : state;
+  username : string;
+  chatid : int;
+  code : int;
   input : string;
+  response : string;
 }
-
-(* [output_string] is the string output that a user sees after typing a
-   command *)
-type output_string = string
-
-(* [current_state] is the state of the server. *)
-type current_state = {
-  state : server_state;
-  output : output option;
-  output_string : output_string;
-}
-
-(* [init_server] initializes the server *)
-val init_server : unit -> server_state
 
 (* [init_state] is the initial state of the current_state. *)
-val init_state : unit -> current_state
+val init_state : unit -> state
 
-(* [input_of_string s] is the corresponding input given string [s] *)
-val input_of_string : string -> input
+(* [init_server] initializes the server *)
+val init_server : unit -> server_data
 
-(* [string_of_output out] is the corresponding string of [out] *)
-val string_of_output : output -> string
+(* [check_username user_data username] returns true if the [username] is
+   not in the [user_data] list, and false if it is. *)
+val check_username : user_data -> string -> bool
 
-(* [insert_al k v lst] is an association list that binds key [k] to
-   value [v] and otherwise is the same as [lst] *)
-val insert_al :
-  string -> string -> Writer.t -> uname_and_pwds -> uname_and_pwds
+(* [login server_data line] will check to see if a given username in
+   [line] is found in the server_data and will respond with "false" if
+   it is not or "UNAME_EXISTS" if it does.*)
+val login : server_data -> string -> Reader.t -> Writer.t -> server_data
 
-(* [insert_l v lst] is a list that adds value [v] to [lst] *)
-val insert_l : string -> string list -> string list
+(* [signup server_data line] check if a given username in [line] is
+   already used, if it is it will return "UNAME_EXISTS" or if not
+   "true", then it will update the server_data to add a new user with
+   username [line] and a blank password. *)
+val signup :
+  server_data -> string -> Reader.t -> Writer.t -> server_data
 
-(* [new_user_pwd] adds a username and password to the association list
-   that stores all current usernames and passwords*)
-val new_user_pwd :
-  string -> string -> Writer.t -> server_state -> uname_and_pwds
-
-(* [new_user_in_room] adds a username to the list of current users*)
-val new_user_in_room : string -> server_state -> string list
+(* [parse server_data line r w]*)
+val parse : server_data -> Reader.t -> Writer.t -> server_data

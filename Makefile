@@ -1,9 +1,10 @@
 .PHONY: test check
 
 build:
+	dune build
 	ocamlbuild -use-ocamlfind src/server/server_view.byte
 	ocamlbuild -use-ocamlfind src/client/client_view.byte
-	dune build
+	
 
 utop:
 	OCAMLRUNPARAM=b dune utop src
